@@ -1,0 +1,25 @@
+# docker-compose.yaml
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  publisher:
+    build: ./publisher
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_TOPIC=test_topic
+    depends_on:
+      - rabbitmq
+
+  subscriber:
+    build: ./subscriber
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_TOPIC=test_topic
+    depends_on:
+      - rabbitmq
+
